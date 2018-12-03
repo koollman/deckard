@@ -12,3 +12,6 @@ CREATE index cube_card_cube_id_idx ON cube_card(cube_id);
 CLUSTER cards using cards_pkey ;
 CLUSTER cubes using cubes_pkey ;
 CLUSTER cube_card using cube_card_card_id_idx;
+
+ALTER TABLE cube_card ADD CONSTRAINT cube_card_cube_id_fkey FOREIGN KEY (cube_id) REFERENCES cubes(cube_id) ON DELETE CASCADE ON UPDATE CASCADE ;
+ALTER TABLE cube_card ADD CONSTRAINT cube_card_card_id_fkey FOREIGN KEY (card_id) REFERENCES cards(card_id) ON DELETE CASCADE ON UPDATE CASCADE ;
