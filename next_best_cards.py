@@ -40,9 +40,9 @@ if not res:
 base_score=res[0][1]
 print(base_score,"matching decks")
 
-scale=int(log10(base_score))
+scale=int(log10(base_score))+1
 score_format='%%%dd' % scale
-score_format='%3.2f%%\t'+score_format+'\t%s'
+score_format='%6.2f%%\t'+score_format+'\t%s'
 
 del res[0]
 
