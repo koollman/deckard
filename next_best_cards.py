@@ -3,6 +3,7 @@
 import json
 import psycopg2
 import sys
+from math import log10
 
 conn = psycopg2.connect('dbname=cube')
 cur = conn.cursor()
@@ -25,9 +26,9 @@ for i,card_id in enumerate(my_cards_ids):
 
 subquery='\n JOIN '.join(sub)+' AND\n\t'.join(cond)
 
-query="SELECT cc.card_id, count(cc.cube_id) FROM cube_card cc JOIN (\n%s\n) sub on (sub.cube_id=cc.cube_id)\n WHERE cc.card_id NOT IN (%s) group by 1 order by 2 desc limit 50 " % (subquery,','.join(map(str,my_cards_ids)))
+query="SELECT cc.card_id, count(cc.cube_id) FROM cube_card cc JOIN (\n%s\n) sub on (sub.cube_id=cc.cube_id)\n WHERE cc.card_id NOT IN (%s) group by 1 order by 2 desc limit 50 " % (subquery,','.join(map(str,my_cards_ids[:-1])))
 
-print(query)
+#print(query)
 
 cur.execute(query)
 res=cur.fetchall()
@@ -35,6 +36,15 @@ res=cur.fetchall()
 if not res:
     print("no luck")
     sys.exit(0)
+
+base_score=res[0][1]
+print(base_score,"matching decks")
+
+scale=int(log10(base_score))
+score_format='%%%dd' % scale
+score_format='%3.2f\t'+score_format+'\t%s'
+
+del res[0]
 
 next_id=[i for i,c in res]
 score=dict(res)
@@ -44,4 +54,6 @@ cur.execute(name_query)
 names=dict(cur.fetchall())
 
 for card_id in next_id:
-    print(names[card_id], score[card_id])
+    s=score[card_id]
+    
+    print(score_format % (100.0*s/base_score,s,names[card_id]))
