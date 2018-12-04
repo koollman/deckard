@@ -17,7 +17,6 @@ results={}
 for name in names:
     cur.execute(query, (name,))
     result=cur.fetchall()
-
     if not result:
         eprint("WARN: nothing found for '%s'" % name)
     if len(result)>1:
