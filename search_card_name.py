@@ -3,9 +3,9 @@
 import psycopg2
 import sys
 import json
+from utils import *
 
-def eprint(*args, **kwargs):
-    print(*args, file=sys.stderr, **kwargs)
+ignore_pipe()
 
 conn = psycopg2.connect('dbname=cube')
 cur = conn.cursor()
@@ -21,7 +21,8 @@ for name in names:
         eprint("WARN: nothing found for '%s'" % name)
     if len(result)>1:
         allnames=[n for (i,n) in result]
-        eprint("WARN: many results for '%s': %s" % (name, allnames))
+        eprint("WARN: %d results for '%s': %s" % (len(result), name, allnames))
     results.update(result)
 
 json.dump(results, sys.stdout)
+print()

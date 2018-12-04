@@ -4,6 +4,8 @@ import json
 import psycopg2
 import sys
 from math import log10
+from utils import *
+ignore_pipe()
 
 conn = psycopg2.connect('dbname=cube')
 cur = conn.cursor()
@@ -26,7 +28,7 @@ for i,card_id in enumerate(my_cards_ids):
 
 subquery='\n JOIN '.join(sub)+' AND\n\t'.join(cond)
 
-query="SELECT cc.card_id, count(cc.cube_id) FROM cube_card cc JOIN (\n%s\n) sub on (sub.cube_id=cc.cube_id)\n WHERE cc.card_id NOT IN (%s) group by 1 order by 2 desc limit 50 " % (subquery,','.join(map(str,my_cards_ids[:-1])))
+query="SELECT cc.card_id, count(cc.cube_id) FROM cube_card cc JOIN (\n%s\n) sub on (sub.cube_id=cc.cube_id)\n WHERE cc.card_id NOT IN (%s) group by 1 order by 2 desc" % (subquery,','.join(map(str,my_cards_ids[:-1])))
 
 #print(query)
 

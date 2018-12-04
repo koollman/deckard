@@ -4,6 +4,8 @@ import json
 import psycopg2
 import sys
 from math import log10
+from utils import *
+ignore_pipe()
 
 conn = psycopg2.connect('dbname=cube')
 cur = conn.cursor()
