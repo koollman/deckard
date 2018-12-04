@@ -32,6 +32,10 @@ print(query)
 cur.execute(query)
 res=cur.fetchall()
 
+if not res:
+    print("no luck")
+    sys.exit(0)
+
 next_id=[i for i,c in res]
 score=dict(res)
 
