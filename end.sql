@@ -1,0 +1,6 @@
+CLUSTER;
+ANALYZE;
+
+REFRESH MATERIALIZED VIEW card_count;
+
+ANALYZE card_count;
