@@ -28,6 +28,8 @@ for i,card_id in enumerate(my_cards_ids):
 
 subquery='\n JOIN '.join(sub)+' AND\n\t'.join(cond)
 
+if len(my_cards_ids) == 1:
+    my_cards_ids.append(-1)
 query="SELECT cc.card_id, count(cc.cube_id) FROM cube_card cc JOIN (\n%s\n) sub on (sub.cube_id=cc.cube_id)\n WHERE cc.card_id NOT IN (%s) group by 1 order by 2 desc" % (subquery,','.join(map(str,my_cards_ids[:-1])))
 
 #print(query)
