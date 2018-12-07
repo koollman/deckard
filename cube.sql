@@ -13,3 +13,9 @@ CREATE TABLE cube_card (
        cube_id int NOT NULL,
        card_id int NOT NULL
 );
+
+CREATE TABLE pair_count(
+    a int NOT NULL,
+    b int NOT NULL,
+    count int NOT NULL
+);

@@ -14,7 +14,7 @@ DECLARE
     ret integer;
 BEGIN
  IF idA > idB THEN
-    return pair_count(B, A);
+    return pair_count(idB, idA);
  END IF;
  IF idA = idB THEN
    SELECT INTO ret count from card_count where card_id=idA;
@@ -30,3 +30,16 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql
 RETURNS NULL ON NULL INPUT;
+
+CREATE FUNCTION count_estimate(query text) RETURNS integer AS $$
+DECLARE
+  rec   record;
+  rows  integer;
+BEGIN
+  FOR rec IN EXECUTE 'EXPLAIN ' || query LOOP
+    rows := substring(rec."QUERY PLAN" FROM ' rows=([[:digit:]]+)');
+    EXIT WHEN rows IS NOT NULL;
+  END LOOP;
+  RETURN rows;
+END;
+$$ LANGUAGE plpgsql VOLATILE STRICT;
